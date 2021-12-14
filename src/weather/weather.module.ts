@@ -10,6 +10,7 @@ import { WeatherService } from './weather.service';
     MongooseModule.forFeature([{ name: WEATHER, schema: WeatherSchema }]),
   ],
   controllers: [WeatherController],
+  exports: [WeatherService],
   providers: [WeatherService],
 })
 export class WeatherModule {}

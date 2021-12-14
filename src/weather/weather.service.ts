@@ -9,10 +9,11 @@ import { WeatherDocument } from './weather.schema';
 
 @Injectable()
 export class WeatherService {
-  @InjectModel(WEATHER)
-  private weatherModel: Model<WeatherDocument>;
   protected axiosConfig: AxiosRequestConfig;
-  constructor() {
+  constructor(
+    @InjectModel(WEATHER)
+    private readonly weatherModel: Model<WeatherDocument>,
+  ) {
     this.axiosConfig = {
       method: 'GET',
       url: config().openMapApi.baseUrl,
@@ -40,28 +41,45 @@ export class WeatherService {
     await this.weatherModel.deleteMany({ city });
   }
 
+  /** get a  new city's weather info */
+  async getNewCityWeatherInfo(
+    city: CityDocument,
+  ): Promise<Record<string, unknown>> {
+    const { weather } = await this.getCurrentStats(city.name);
+    await this.saveWeather(city.id, weather[0]);
+    return weather;
+  }
+
   /** save a city's weather info */
   async saveWeather(city: string, data: Record<string, unknown>) {
     const weatherInfo = await this.weatherModel.findOne({ city });
 
     if (weatherInfo) {
-      weatherInfo.data = data;
+      weatherInfo.weather = data;
+      console.log({ weatherInfo, city, data });
       return weatherInfo.save();
     }
-    return this.weatherModel.create({ city, data });
-  }
-
-  /** get a city's weather info */
-  async getCityWeather(city: string) {
-    return await this.weatherModel.findOne({ city });
+    const weather = await this.weatherModel.create({ city, weather: data });
+    console.log({ weatherInfo, city, data, weather });
+    return weather;
   }
 
   /** fetch and update latest weather info for cities */
-  async updateCityWeather(cities: CityDocument[]) {
+  async getCitiesLiveWeather(
+    cities: CityDocument[],
+    update?: boolean,
+  ): Promise<CityDocument[]> {
     // get all cities, and fetch weather information for each city
-    cities.forEach(async (city) => {
-      const { weather } = await this.getCurrentStats(city.name);
-      await this.saveWeather(city.id, weather);
-    });
+    const cityPromise = await Promise.all(
+      cities.map(async (city) => {
+        const weatherInfo = await this.getCurrentStats(city.name);
+        city.weather = weatherInfo;
+        if (update) {
+          await this.saveWeather(city.id, weatherInfo.weather);
+        }
+        return city;
+      }),
+    );
+    return cityPromise;
   }
 }

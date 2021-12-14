@@ -3,9 +3,11 @@ import { SchemaTypes, Document } from 'mongoose';
 import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CITY } from 'src/shared/constants/schema';
 import { City } from 'src/city/city.schema';
+import { BaseSchemaDecorator } from 'src/shared/decorators/base_schema.decorator';
 
 export type WeatherDocument = Weather & Document;
 
+@BaseSchemaDecorator()
 export class Weather {
   @Prop({
     type: SchemaTypes.ObjectId,
@@ -19,16 +21,7 @@ export class Weather {
   @Prop({
     type: Object,
   })
-  data: Record<string, unknown>;
-
-  @Prop({
-    type: SchemaTypes.Boolean,
-    default: false,
-  })
-  isDeleted?: boolean;
-
-  @Prop()
-  deletedAt?: Date;
+  weather: Record<string, unknown>;
 }
 
 const WeatherSchema = SchemaFactory.createForClass(Weather);

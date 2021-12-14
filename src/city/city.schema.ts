@@ -35,12 +35,13 @@ export class City {
   long?: string;
 
   // virtual fields
-  weather?: WeatherDocument[];
+  weather?: Record<string, unknown> | WeatherDocument[];
 }
 
 const CitySchema = SchemaFactory.createForClass(City);
 CitySchema.virtual('weather', {
   ref: WEATHER,
+  autopopulate: true,
   localField: '_id',
   foreignField: 'city',
 });
