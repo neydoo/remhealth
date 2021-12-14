@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  weatherapp:
+    image: weatherapp
+    depends_on:
+      - mongodb
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 9092:9092
+      - 3000:3000
+
+    volumes:
+      - .:/usr/src/app
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/db
+
+volumes:
+    data:
