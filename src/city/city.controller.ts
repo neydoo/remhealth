@@ -76,7 +76,7 @@ export class CityController {
       await this.cityService.getCityByName(id);
 
       return res.status(StatusCode.Success).send({
-        message: 'city weather iformation has been retrieved successsfully',
+        message: 'city weather information has been retrieved successsfully',
       });
     } catch (error) {
       return res.status(StatusCode.Failure).send({
@@ -92,7 +92,7 @@ export class CityController {
     @Res() res: Response,
   ): Promise<Response> {
     try {
-      const responseData = await this.cityService.getAllCities();
+      const responseData = await this.cityService.getCity(id);
 
       return res.status(StatusCode.Success).send({
         message: 'cities retrieved successsfully',
