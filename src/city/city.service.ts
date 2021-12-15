@@ -33,10 +33,7 @@ export class CityService {
     logger: Logger,
   ): Promise<CityDocument> {
     const city = await this.create(data, logger);
-    const weather = await this.weatherService.getCityWeatherInfo(
-      city,
-      logger,
-    );
+    const weather = await this.weatherService.getCityWeatherInfo(city, logger);
     city.weather = weather;
     return city;
   }
