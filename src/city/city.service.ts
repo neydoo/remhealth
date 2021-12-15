@@ -17,6 +17,7 @@ export class CityService {
     private cityModel: Model<CityDocument>,
     private weatherService: WeatherService,
   ) {}
+
   /** persist city record to db */
   async create(data: CityDocument, logger?: Logger): Promise<CityDocument> {
     const existingCity = await this.cityModel.findOne({ name: data.name });
@@ -30,7 +31,7 @@ export class CityService {
   /** get current weather info for a city and persist city record to db */
   async createNewCity(
     data: CityDocument,
-    logger: Logger,
+    logger?: Logger,
   ): Promise<CityDocument> {
     const city = await this.create(data, logger);
     const weather = await this.weatherService.getCityWeatherInfo(city, logger);
@@ -43,7 +44,7 @@ export class CityService {
     const existingCity = await this.cityModel.findById(id);
     if (!existingCity) {
       logger?.warning(`city with ${id} not found`);
-      throw new NotFoundError(existingCity.id);
+      throw new NotFoundError(id);
     }
     logger?.info(`deleting city record for ${id}`);
     await this.cityModel.findByIdAndRemove(id);

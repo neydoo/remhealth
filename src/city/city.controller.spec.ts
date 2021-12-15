@@ -2,7 +2,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CITY } from '../shared/constants/schema';
 import { WeatherModule } from '../weather/weather.module';
-import { rootMongooseTestModule } from '../../test/mongo-config';
+import {
+  closeInMongodConnection,
+  rootMongooseTestModule,
+} from '../../test/mongo-config';
 
 import { LoggerModule } from '../logger/logger.module';
 import { CityController } from './city.controller';
@@ -30,5 +33,9 @@ describe('CityController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  afterAll(async () => {
+    await closeInMongodConnection();
   });
 });

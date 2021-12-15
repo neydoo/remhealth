@@ -17,22 +17,21 @@ export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
   });
 
 export const closeInMongodConnection = async () => {
-  if (mongod) await mongod.stop();
+  if (mongod) {
+    await mongod.stop();
+  } else {
+    console.log('nada');
+  }
 };
 
 export const mockRepository = {
-  findOne: () => {
-    return { exec: jest.fn(() => {}) };
-  },
-  findById: () => {
-    return { exec: jest.fn(() => {}) };
-  },
-  findByIdAndRemove: () => {
-    return { exec: jest.fn(() => {}) };
-  },
-  deleteMany: () => {
-    return { exec: jest.fn(() => {}) };
-  },
+  findOne: () => ({}),
+  updateOne: () => ({}),
+  findById: () => jest.fn(() => {}),
+  find: () => jest.fn(() => [{}]),
+  findByIdAndRemove: () => jest.fn(() => {}),
+  deleteMany: () => jest.fn(() => {}),
+  save: jest.fn(() => {}),
   create: jest.fn(() => {}),
   aggregate: jest.fn(() => [{}]),
 };

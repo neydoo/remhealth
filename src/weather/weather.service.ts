@@ -50,7 +50,11 @@ export class WeatherService {
     if (weatherInfo) {
       logger?.info('updating existing weather record', weatherInfo.id);
       weatherInfo.weather = data;
-      return weatherInfo.save();
+      await this.weatherModel.updateOne(
+        { _id: weatherInfo.id },
+        { weather: data },
+      );
+      return weatherInfo;
     }
     logger?.info('creating new weather record');
     const weather = await this.weatherModel.create({ city, weather: data });
@@ -64,6 +68,9 @@ export class WeatherService {
     logger?: Logger,
   ): Promise<CityDocument[]> {
     // get all cities, and fetch weather information for each city
+    if (!cities.length) {
+      return;
+    }
     const cityPromise = await Promise.all(
       cities.map(async (city) => {
         const weatherInfo = await this.getCurrentStats(city.name);

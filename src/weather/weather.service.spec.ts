@@ -19,7 +19,9 @@ import { OpenMapService } from './open-map.service';
 describe('WeatherService', () => {
   let service: WeatherService;
   const openMapService = {
-    getLiveWeatherInfo: () => ({}),
+    getLiveWeatherInfo: () => ({
+      weather: [{}],
+    }),
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,9 +31,10 @@ describe('WeatherService', () => {
       ],
       providers: [
         WeatherService,
+        OpenMapService,
         LoggerModule,
         {
-          provide: getModelToken(Weather.name),
+          provide: getModelToken(WEATHER),
           useValue: mockRepository,
         },
       ],
@@ -49,18 +52,18 @@ describe('WeatherService', () => {
 
   it('should delete weather information for a city', async () => {
     const deleteWeather = jest.spyOn(service, 'deleteWeather');
-    const city = new City() as CityDocument;
-    city.id = new Types.ObjectId();
-    await service.deleteWeather(city.id);
-    expect(deleteWeather).toHaveBeenCalledWith(city.id);
+    const weather = new Weather() as WeatherDocument;
+    weather.id = new Types.ObjectId();
+    await service.deleteWeather(weather.id);
+    expect(deleteWeather).toHaveBeenCalledWith(weather.id);
   });
 
   it('should get saved weather information for a city', async () => {
     const getCityWeatherInfo = jest.spyOn(service, 'getCityWeatherInfo');
     const city = new City() as CityDocument;
     city.id = new Types.ObjectId();
-    await service.getCityWeatherInfo(city as CityDocument);
-    expect(getCityWeatherInfo).toHaveBeenCalledWith(city.id);
+    await service.getCityWeatherInfo(city);
+    expect(getCityWeatherInfo).toHaveBeenCalledWith(city);
   });
 
   it('should save weather information for a city', async () => {
