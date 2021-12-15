@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Document } from 'mongoose';
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty } from 'class-validator';
 import { CITY } from 'src/shared/constants/schema';
 import { City } from 'src/city/city.schema';
 import { BaseSchemaDecorator } from 'src/shared/decorators/base_schema.decorator';

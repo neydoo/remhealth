@@ -4,28 +4,41 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Res,
 } from '@nestjs/common';
+import { Logger } from 'winston';
+
 import { CityService } from './city.service';
 import { CityDocument } from './city.schema';
 import { StatusCode } from 'src/shared/types';
 import { ResponseService } from 'src/shared/services/response.service';
+import { LOGGER } from 'src/shared/constants/schema';
 
 @Controller('cities')
 export class CityController {
   constructor(
+    @Inject(LOGGER)
+    private logger: Logger,
     private readonly cityService: CityService,
     private responseService: ResponseService,
-  ) {}
+  ) {
+    this.logger = logger.child({
+      controller: 'CityController',
+    });
+  }
   @Post('')
   async createCity(
     @Res() res: Response,
     @Body() data: CityDocument,
   ): Promise<Response> {
     try {
-      const responseData = await this.cityService.createNewCity(data);
+      const responseData = await this.cityService.createNewCity(
+        data,
+        this.logger,
+      );
       return this.responseService.json(
         res,
         StatusCode.Created,
@@ -34,6 +47,7 @@ export class CityController {
       );
     } catch (error) {
       console.log('here', error);
+      this.logger.error(error);
       return this.responseService.json(res, error);
     }
   }
@@ -50,6 +64,7 @@ export class CityController {
         responseData,
       );
     } catch (error) {
+      this.logger.error(error);
       return this.responseService.json(res, error);
     }
   }
@@ -68,9 +83,8 @@ export class CityController {
         'city has been deleted successsfully',
       );
     } catch (error) {
-      return res.status(StatusCode.Failure).send({
-        message: error.message || 'an error occurred while retrieving cities',
-      });
+      this.logger.error(error);
+      return this.responseService.json(res, error);
     }
   }
 
@@ -80,7 +94,7 @@ export class CityController {
     @Res() res: Response,
   ): Promise<Response> {
     try {
-      const city = await this.cityService.getCityByName(name);
+      const city = await this.cityService.getCityByName(name, this.logger);
 
       return this.responseService.json(
         res,
@@ -89,10 +103,8 @@ export class CityController {
         city,
       );
     } catch (error) {
-      return res.status(StatusCode.Failure).send({
-        message:
-          error.message || 'an error occurred while retrieving weather info',
-      });
+      this.logger.error(error);
+      return this.responseService.json(res, error);
     }
   }
 
@@ -111,9 +123,8 @@ export class CityController {
         responseData,
       );
     } catch (error) {
-      return res.status(StatusCode.Failure).send({
-        message: error.message || 'an error occurred while retrieving cities',
-      });
+      this.logger.error(error);
+      return this.responseService.json(res, error);
     }
   }
 }

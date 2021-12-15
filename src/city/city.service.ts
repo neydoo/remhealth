@@ -5,7 +5,9 @@ import { Model } from 'mongoose';
 import configuration from 'src/config/configuration';
 import { CITY } from 'src/shared/constants/schema';
 import EntityExists from 'src/shared/errors/EntityExistsError';
+import NotFoundError from 'src/shared/errors/NotFoundError';
 import { WeatherService } from 'src/weather/weather.service';
+import { Logger } from 'winston';
 import { CityDocument } from './city.schema';
 
 @Injectable()
@@ -16,57 +18,73 @@ export class CityService {
     private weatherService: WeatherService,
   ) {}
   /** persist city record to db */
-  async create(data: CityDocument): Promise<CityDocument> {
+  async create(data: CityDocument, logger?: Logger): Promise<CityDocument> {
     const existingCity = await this.cityModel.findOne({ name: data.name });
     if (existingCity) {
-      // throw new EntityExists('city');
-      return existingCity;
+      logger?.warning(`city with ${data.name} already exists`);
+      throw new EntityExists('city');
     }
     return this.cityModel.create(data);
   }
 
   /** get current weather info for a city and persist city record to db */
-  async createNewCity(data: CityDocument): Promise<CityDocument> {
-    const city = await this.create(data);
-    const weather = await this.weatherService.getNewCityWeatherInfo(city);
+  async createNewCity(
+    data: CityDocument,
+    logger: Logger,
+  ): Promise<CityDocument> {
+    const city = await this.create(data, logger);
+    const weather = await this.weatherService.getCityWeatherInfo(
+      city,
+      logger,
+    );
     city.weather = weather;
     return city;
   }
 
   /** delete a city and its weather info */
-  async deleteCity(id: string): Promise<void> {
+  async deleteCity(id: string, logger?: Logger): Promise<void> {
     const existingCity = await this.cityModel.findById(id);
     if (!existingCity) {
-      throw new EntityExists(existingCity.id);
+      logger?.warning(`city with ${id} not found`);
+      throw new NotFoundError(existingCity.id);
     }
-
-    await this.deleteWeather(existingCity.id);
+    logger?.info(`deleting city record for ${id}`);
+    await this.cityModel.findByIdAndRemove(id);
+    await this.deleteWeather(existingCity.id, logger);
   }
 
   /** delete a city's weather info */
-  async deleteWeather(id: string): Promise<void> {
+  async deleteWeather(id: string, logger?: Logger): Promise<void> {
+    logger?.info(`deleting weather record for city ${id}`);
     return this.weatherService.deleteWeather(id);
   }
 
   /** get a city's info by id */
-  async getCity(id: string): Promise<CityDocument> {
+  async getCity(id: string, logger?: Logger): Promise<CityDocument> {
+    logger?.info(`get record for city ${id}`);
     return this.cityModel.findById(id);
   }
 
   /** get all city's info along with weather info */
-  async getAllCities(): Promise<CityDocument[]> {
+  async getAllCities(logger?: Logger): Promise<CityDocument[]> {
+    logger?.info(`get record for all cities`);
     return this.cityModel.find();
   }
 
   /** get all cities live weather info */
-  async getAllCitiesLiveWeather(): Promise<CityDocument[]> {
-    const cities = await this.cityModel.find();
-    return await this.weatherService.getCitiesLiveWeather(cities);
+  async getAllCitiesLiveWeather(logger?: Logger): Promise<CityDocument[]> {
+    const cities = await this.getAllCities(logger);
+    return await this.weatherService.getCitiesLiveWeather(
+      cities,
+      false,
+      logger,
+    );
   }
 
   /** get a city using it's name */
   async getCityByName(
     name: string,
+    logger?: Logger,
   ): Promise<CityDocument | Record<string, unknown>> {
     const [city] = await this.cityModel.aggregate([
       {
@@ -113,8 +131,9 @@ export class CityService {
     ]);
 
     if (!city) {
-      return await this.weatherService.getCurrentStats(name);
+      return await this.weatherService.getCurrentStats(name, logger);
     }
+    logger?.info(`fetched record for city ${name}`);
     return city;
   }
 

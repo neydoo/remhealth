@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { Model } from 'mongoose';
 import { CityDocument } from 'src/city/city.schema';
 import { WEATHER } from 'src/shared/constants/schema';
+import { Logger } from 'winston';
 import config from '../config/configuration';
 import { WeatherDocument } from './weather.schema';
 
@@ -27,40 +28,47 @@ export class WeatherService {
   }
 
   /** get a city's weather info */
-  async getCurrentStats(city: string) {
+  async getCurrentStats(city: string, logger?: Logger) {
     const options = { ...this.axiosConfig };
     options.url += 'weather';
     options.params = { ...options.params, q: city };
 
+    logger?.info(`fetching real time weather info for ${city}`);
     const res = await axios(options);
     return res.data;
   }
 
   /** delete a city's weather info */
-  async deleteWeather(city: string): Promise<void> {
+  async deleteWeather(city: string, logger?: Logger): Promise<void> {
+    logger?.info(`removing weather info for ${city}`);
     await this.weatherModel.deleteMany({ city });
   }
 
   /** get a  new city's weather info */
-  async getNewCityWeatherInfo(
+  async getCityWeatherInfo(
     city: CityDocument,
+    logger?: Logger,
   ): Promise<Record<string, unknown>> {
-    const { weather } = await this.getCurrentStats(city.name);
-    await this.saveWeather(city.id, weather[0]);
+    const { weather } = await this.getCurrentStats(city.name, logger);
+    await this.saveWeather(city.id, weather[0], logger);
     return weather;
   }
 
   /** save a city's weather info */
-  async saveWeather(city: string, data: Record<string, unknown>) {
+  async saveWeather(
+    city: string,
+    data: Record<string, unknown>,
+    logger?: Logger,
+  ) {
     const weatherInfo = await this.weatherModel.findOne({ city });
 
     if (weatherInfo) {
+      logger?.info('updating existing weather record', weatherInfo.id);
       weatherInfo.weather = data;
-      console.log({ weatherInfo, city, data });
       return weatherInfo.save();
     }
+    logger?.info('creating new weather record');
     const weather = await this.weatherModel.create({ city, weather: data });
-    console.log({ weatherInfo, city, data, weather });
     return weather;
   }
 
@@ -68,6 +76,7 @@ export class WeatherService {
   async getCitiesLiveWeather(
     cities: CityDocument[],
     update?: boolean,
+    logger?: Logger,
   ): Promise<CityDocument[]> {
     // get all cities, and fetch weather information for each city
     const cityPromise = await Promise.all(
@@ -75,6 +84,7 @@ export class WeatherService {
         const weatherInfo = await this.getCurrentStats(city.name);
         city.weather = weatherInfo;
         if (update) {
+          logger?.info(`updating weather info for ${city.id}`);
           await this.saveWeather(city.id, weatherInfo.weather);
         }
         return city;
