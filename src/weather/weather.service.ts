@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios, { AxiosRequestConfig } from 'axios';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { Logger } from 'winston';
 
 import { CityDocument } from '../city/city.schema';
 import { WEATHER } from '../shared/constants/schema';
-import config from '../config/configuration';
+import { OpenMapService } from './open-map.service';
 import { WeatherDocument } from './weather.schema';
 
 @Injectable()
@@ -15,28 +15,12 @@ export class WeatherService {
   constructor(
     @InjectModel(WEATHER)
     private readonly weatherModel: Model<WeatherDocument>,
-  ) {
-    this.axiosConfig = {
-      method: 'GET',
-      url: config().openMapApi.baseUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      params: {
-        appid: config().openMapApi.key,
-      },
-    };
-  }
+    private openMapService: OpenMapService,
+  ) {}
 
   /** get a city's weather info */
   async getCurrentStats(city: string, logger?: Logger) {
-    const options = { ...this.axiosConfig };
-    options.url += 'weather';
-    options.params = { ...options.params, q: city };
-
-    logger?.info(`fetching real time weather info for ${city}`);
-    const res = await axios(options);
-    return res.data;
+    return this.openMapService.getLiveWeatherInfo(city, logger);
   }
 
   /** delete a city's weather info */

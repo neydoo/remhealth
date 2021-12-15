@@ -14,10 +14,13 @@ import {
   mockRepository,
   rootMongooseTestModule,
 } from '../../test/mongo-config';
+import { OpenMapService } from './open-map.service';
 
 describe('WeatherService', () => {
   let service: WeatherService;
-
+  const openMapService = {
+    getLiveWeatherInfo: () => ({}),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -32,7 +35,10 @@ describe('WeatherService', () => {
           useValue: mockRepository,
         },
       ],
-    }).compile();
+    })
+      .overrideProvider(OpenMapService)
+      .useValue(openMapService)
+      .compile();
 
     service = module.get<WeatherService>(WeatherService);
   });
