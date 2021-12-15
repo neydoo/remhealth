@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios, { AxiosRequestConfig } from 'axios';
-import { Model } from 'mongoose';
-import { CityDocument } from 'src/city/city.schema';
-import { WEATHER } from 'src/shared/constants/schema';
+import { Model, ObjectId } from 'mongoose';
 import { Logger } from 'winston';
+
+import { CityDocument } from '../city/city.schema';
+import { WEATHER } from '../shared/constants/schema';
 import config from '../config/configuration';
 import { WeatherDocument } from './weather.schema';
 

@@ -17,7 +17,6 @@ import * as mongoosePopulate from 'mongoose-autopopulate';
     }),
     MongooseModule.forRoot(configuration().database.url, {
       connectionFactory: (connection) => {
-        // console.log(configuration().database.url);
         // applies plugin to all schema
         connection.plugin(mongoosePopulate);
         return connection;

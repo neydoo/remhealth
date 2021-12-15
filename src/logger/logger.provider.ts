@@ -2,7 +2,7 @@ import { Provider } from '@nestjs/common';
 
 import { Logger, createLogger, format, transports } from 'winston';
 import configuration from '../config/configuration';
-import { LOGGER } from 'src/shared/constants/schema';
+import { LOGGER } from '../shared/constants/schema';
 
 export const loggerProviders: Provider[] = [
   {

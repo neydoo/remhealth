@@ -10,7 +10,7 @@ export interface Configuration {
     token: string;
     subdomain: string;
   };
-  database: { url: string };
+  database: { url: string; test: string };
   cron: { weatherUpdateFrequency: string };
 }
 
@@ -30,6 +30,7 @@ export default (): Configuration => ({
   },
   database: {
     url: process.env.DATABASE_URL,
+    test: process.env.DATABASE_TEST,
   },
   cron: {
     weatherUpdateFrequency: process.env.WEATHER_FREQUENCY || '1',

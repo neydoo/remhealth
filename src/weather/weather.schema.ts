@@ -1,9 +1,9 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Document } from 'mongoose';
 import { IsMongoId, IsNotEmpty } from 'class-validator';
-import { CITY } from 'src/shared/constants/schema';
-import { City } from 'src/city/city.schema';
-import { BaseSchemaDecorator } from 'src/shared/decorators/base_schema.decorator';
+import { CITY } from '../shared/constants/schema';
+import { City } from '../city/city.schema';
+import { BaseSchemaDecorator } from '../shared/decorators/base_schema.decorator';
 
 export type WeatherDocument = Weather & Document;
 

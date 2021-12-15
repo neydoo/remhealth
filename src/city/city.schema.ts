@@ -2,9 +2,9 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { BaseSchemaDecorator } from 'src/shared/decorators/base_schema.decorator';
-import { WEATHER } from 'src/shared/constants/schema';
-import { WeatherDocument } from 'src/weather/weather.schema';
+import { BaseSchemaDecorator } from '../shared/decorators/base_schema.decorator';
+import { WEATHER } from '../shared/constants/schema';
+import { WeatherDocument } from '../weather/weather.schema';
 
 export type CityDocument = City & Document;
 

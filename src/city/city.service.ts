@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cron } from '@nestjs/schedule';
 import { Model } from 'mongoose';
-import configuration from 'src/config/configuration';
-import { CITY } from 'src/shared/constants/schema';
-import EntityExists from 'src/shared/errors/EntityExistsError';
-import NotFoundError from 'src/shared/errors/NotFoundError';
-import { WeatherService } from 'src/weather/weather.service';
+import configuration from '../config/configuration';
+import { CITY } from '../shared/constants/schema';
+import EntityExists from '../shared/errors/EntityExistsError';
+import NotFoundError from '../shared/errors/NotFoundError';
+import { WeatherService } from '../weather/weather.service';
 import { Logger } from 'winston';
 import { CityDocument } from './city.schema';
 

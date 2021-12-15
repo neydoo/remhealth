@@ -13,9 +13,9 @@ import { Logger } from 'winston';
 
 import { CityService } from './city.service';
 import { CityDocument } from './city.schema';
-import { StatusCode } from 'src/shared/types';
-import { ResponseService } from 'src/shared/services/response.service';
-import { LOGGER } from 'src/shared/constants/schema';
+import { StatusCode } from '../shared/types';
+import { ResponseService } from '../shared/services/response.service';
+import { LOGGER } from '../shared/constants/schema';
 
 @Controller('cities')
 export class CityController {
