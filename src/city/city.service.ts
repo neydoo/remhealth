@@ -8,7 +8,7 @@ import EntityExists from '../shared/errors/EntityExistsError';
 import NotFoundError from '../shared/errors/NotFoundError';
 import { WeatherService } from '../weather/weather.service';
 import { Logger } from 'winston';
-import { CityDocument } from './city.schema';
+import { City, CityDocument } from './city.schema';
 
 @Injectable()
 export class CityService {
@@ -19,7 +19,7 @@ export class CityService {
   ) {}
 
   /** persist city record to db */
-  async create(data: CityDocument, logger?: Logger): Promise<CityDocument> {
+  async create(data: City, logger?: Logger): Promise<CityDocument> {
     const existingCity = await this.cityModel.findOne({ name: data.name });
     if (existingCity) {
       logger?.warning(`city with ${data.name} already exists`);
@@ -29,10 +29,7 @@ export class CityService {
   }
 
   /** get current weather info for a city and persist city record to db */
-  async createNewCity(
-    data: CityDocument,
-    logger?: Logger,
-  ): Promise<CityDocument> {
+  async createNewCity(data: City, logger?: Logger): Promise<CityDocument> {
     const city = await this.create(data, logger);
     const weather = await this.weatherService.getCityWeatherInfo(city, logger);
     city.weather = weather;

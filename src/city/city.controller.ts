@@ -12,7 +12,7 @@ import {
 import { Logger } from 'winston';
 
 import { CityService } from './city.service';
-import { CityDocument } from './city.schema';
+import { City, CityDocument } from './city.schema';
 import { StatusCode } from '../shared/types';
 import { ResponseService } from '../shared/services/response.service';
 import { LOGGER } from '../shared/constants/schema';
@@ -32,7 +32,7 @@ export class CityController {
   @Post('')
   async createCity(
     @Res() res: Response,
-    @Body() data: CityDocument,
+    @Body() data: City,
   ): Promise<Response> {
     try {
       const responseData = await this.cityService.createNewCity(
