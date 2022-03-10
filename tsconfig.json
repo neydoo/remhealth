@@ -9,8 +9,13 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@rem/user/*": ["user/*"],
+      "@rem/shared/*": ["shared/*"],
+      "@rem/config/*": ["config/*"],
+    },
   }
 }

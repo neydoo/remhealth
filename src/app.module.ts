@@ -8,6 +8,8 @@ import configuration from './config/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from './logger/logger.module';
+import { UserModule } from './user/user.module';
+import { WardModule } from './ward/ward.module';
 import * as mongoosePopulate from 'mongoose-autopopulate';
 
 @Module({
@@ -28,6 +30,8 @@ import * as mongoosePopulate from 'mongoose-autopopulate';
     { module: LoggerModule, global: true },
     WeatherModule,
     CityModule,
+    UserModule,
+    WardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

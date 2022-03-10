@@ -70,6 +70,11 @@
       "json",
       "ts"
     ],
+    "moduleNameMapper": {
+      "@rem/user/(.*)$": "<rootDir>/user/$1",
+      "@rem/shared/(.*)$": "<rootDir>/shared/$1",
+      "^@rem/config/(.*)$": "<rootDir>/config/$1"
+  },
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
