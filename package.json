@@ -30,12 +30,14 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.0.2",
     "@nestjs/swagger": "^5.1.5",
+    "@types/mongoose-paginate-v2": "^1.4.3",
     "axios": "^0.24.0",
     "class-validator": "^0.13.2",
     "logger": "^0.0.1",
     "mongodb-memory-server": "^8.0.4",
     "mongoose": "^6.1.1",
     "mongoose-autopopulate": "^0.16.0",
+    "mongoose-paginate-v2": "^1.6.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
@@ -74,7 +76,7 @@
       "@rem/user/(.*)$": "<rootDir>/user/$1",
       "@rem/shared/(.*)$": "<rootDir>/shared/$1",
       "^@rem/config/(.*)$": "<rootDir>/config/$1"
-  },
+    },
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {

@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import CreateCountryDto from '../dto/country.dto';
 import { Country } from '../interfaces/country.interface';
-import { COUNTRY } from 'src/shared/constants/schema';
+import { COUNTRY } from '@rem/shared/constants/schema';
 
 type countryModel<T extends Document> = PaginateModel<T>;
 

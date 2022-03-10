@@ -3,6 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
+import { CountryDocument } from 'countries/schema/country.schema';
+import { StateDocument } from 'countries/schema/state.schema';
 
 export type ParentDocument = Parent & Document;
 
@@ -30,7 +32,7 @@ export class Parent {
   })
   @IsNotEmpty()
   @IsString()
-  otherName: string;
+  country: string | CountryDocument;
 
   @ApiProperty({ description: 'dob of the child' })
   @Prop({
@@ -38,14 +40,7 @@ export class Parent {
   })
   @IsNotEmpty()
   @IsString()
-  dob: string;
-
-  @Prop({
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsString()
-  parent: string;
+  state: string | StateDocument;
 }
 
 const ParentSchema = SchemaFactory.createForClass(Parent);
