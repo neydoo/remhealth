@@ -13,7 +13,7 @@ export const loggerProviders: Provider[] = [
         level: logLevel,
         format: format.json(),
         defaultMeta: {
-          product: 'weather-api',
+          product: 'RemHealth',
         },
       });
       const { env } = configuration();

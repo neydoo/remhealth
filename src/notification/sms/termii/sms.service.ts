@@ -27,7 +27,7 @@ export default class TermiiService {
       sms: message,
       type: 'plain',
       channel: 'dnd',
-      api_key: configuration().sms.termii.apiKey as string,
+      api_key: configuration().sms.termii.key as string,
     };
 
     const options = cloneDeep(this.termiiOptions);

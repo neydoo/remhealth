@@ -6,8 +6,8 @@ import { Logger } from 'winston';
 import { EmailService } from './email.interface';
 import { Address, Mail } from '.';
 import { ResetPayload } from './template.types';
-import configuration from 'src/config/configuration';
-import { EMAIL_SERVICE, LOGGER } from 'src/shared/constants/schema';
+import configuration from '@rem/config/configuration';
+import { EMAIL_SERVICE, LOGGER } from '@rem/shared/constants/schema';
 
 export class EmailTemplateEngine {
   private engine: Environment;

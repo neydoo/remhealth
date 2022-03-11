@@ -4,3 +4,12 @@ export enum StatusCode {
   Failure = 400,
   Conflict = 409,
 }
+
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+  Unknwon = 'unknown',
+  None = 'none',
+}
+
+export const Genders = Object.values(Gender);

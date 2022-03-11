@@ -1,9 +1,27 @@
 export interface Configuration {
   env: string;
+  emailPlatform: string;
   port: number;
-  openMapApi: {
-    baseUrl: string;
-    key: string;
+  google: {
+    client_id: string;
+    client_secret: string;
+    redirect_uris: string[];
+  };
+  sms?: {
+    termii?: { url: string; key: string };
+    smart?: { url: string; key: string };
+  };
+  ui: { url: string };
+  email: {
+    defaultSenderAddress: string;
+    defaultSenderName: string;
+    sparkpost?: {
+      key: string;
+    };
+    mailgun: {
+      key: string;
+      domain: string;
+    };
   };
   logger: { logLevel: string };
   loggly: {
@@ -16,10 +34,20 @@ export interface Configuration {
 
 export default (): Configuration => ({
   env: process.env.NODE_ENV || 'development',
+  ui: { url: '' },
+  sms: { termii: { url: '', key: '' } },
+  emailPlatform: 'mock',
   port: parseInt(process.env.PORT, 10) || 2001,
-  openMapApi: {
-    baseUrl: process.env.OPENMAP_API_URL,
-    key: process.env.OPENMAP_API_KEY,
+  email: {
+    defaultSenderAddress: '',
+    defaultSenderName: '',
+    sparkpost: { key: '' },
+    mailgun: { key: '', domain: '' },
+  },
+  google: {
+    client_id: '',
+    client_secret: '',
+    redirect_uris: [],
   },
   logger: {
     logLevel: '',

@@ -23,7 +23,7 @@
   "dependencies": {
     "@golevelup/ts-jest": "^0.3.2",
     "@nestjs/common": "^8.0.0",
-    "@nestjs/config": "^1.1.5",
+    "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/microservices": "^8.2.3",
     "@nestjs/mongoose": "^9.0.1",
@@ -33,14 +33,18 @@
     "@types/mongoose-paginate-v2": "^1.4.3",
     "axios": "^0.24.0",
     "class-validator": "^0.13.2",
+    "googleapis": "39",
     "logger": "^0.0.1",
+    "mailgun.js": "^5.0.1",
     "mongodb-memory-server": "^8.0.4",
     "mongoose": "^6.1.1",
     "mongoose-autopopulate": "^0.16.0",
     "mongoose-paginate-v2": "^1.6.3",
+    "nunjucks": "^3.2.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "sparkpost": "^2.1.4",
     "swagger-ui-express": "^4.2.0",
     "winston": "^3.3.3"
   },
@@ -75,6 +79,8 @@
     "moduleNameMapper": {
       "@rem/user/(.*)$": "<rootDir>/user/$1",
       "@rem/shared/(.*)$": "<rootDir>/shared/$1",
+      "@rem/notification/(.*)$": "<rootDir>/notification/$1",
+      "@rem/vaccine/(.*)$": "<rootDir>/vaccine/$1",
       "^@rem/config/(.*)$": "<rootDir>/config/$1"
     },
     "rootDir": "src",

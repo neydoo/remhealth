@@ -1,25 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PARENT } from 'src/shared/constants/schema';
-import { Parent, ParentDocument } from './schema/Parent.schema';
+import { WARD } from '@rem/shared/constants/schema';
+import { Ward, WardDocument } from './schema/ward.schema';
+import GoogleService from '@rem/notification/calendar/google/calendar.service';
+import { VaccineService } from '@rem/vaccine/vaccine.service';
+import { UtilService } from '@rem/shared/services/util.service';
 
 @Injectable()
-export class ParentService {
+export class WardService {
   constructor(
-    @InjectModel(PARENT)
-    private ParentModel: Model<ParentDocument>,
+    @InjectModel(WARD)
+    private wardModel: Model<WardDocument>,
+    private googleService: GoogleService,
+    private vaccineService: VaccineService,
+    private utilService: UtilService,
   ) {}
 
-  async addParent(Parent: Parent): Promise<void> {
-    await this.ParentModel.create(Parent);
+  async addWard(Ward: Ward): Promise<void> {
+    await this.wardModel.create(Ward);
   }
 
-  async countParent(): Promise<number> {
-    return this.ParentModel.count();
+  async countWard(): Promise<number> {
+    return this.wardModel.count();
   }
 
-  async findParentParents(parent: string): Promise<ParentDocument[]> {
-    return this.ParentModel.find({ parent });
+  async findWardWards(parent: string): Promise<WardDocument[]> {
+    return this.wardModel.find({ parent });
+  }
+
+  async setupGoogleCalendar(code: string): Promise<void> {
+    const vaccines = await this.vaccineService.getAllVaccines();
+    const groupedVaccines = this.utilService.group(vaccines, 'day');
+
+    await this.googleService.createEvents(code);
   }
 }

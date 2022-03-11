@@ -4,10 +4,11 @@ import { Logger } from 'winston';
 import { SparkpostService } from './email/sparkpost/spartkpost.service';
 import { MockService } from './email/mock/mock.service';
 import { EmailService } from './email';
-import SlackService from './slack/slack.service';
 import { EmailTemplateEngine } from './email/template.service';
-import { EMAIL_SERVICE, LOGGER } from 'src/shared/constants/schema';
-import configuration from 'src/config/configuration';
+import { EMAIL_SERVICE, LOGGER } from '@rem/shared/constants/schema';
+import configuration from '@rem/config/configuration';
+import { MailGunService } from './email/mailgun/mail.service';
+import GoogleService from './calendar/google/calendar.service';
 
 @Module({
   imports: [],
@@ -15,19 +16,23 @@ import configuration from 'src/config/configuration';
     {
       provide: EMAIL_SERVICE,
       useFactory: (logger: Logger): EmailService => {
-        if (configuration().enableMockEmail) {
-          logger.info('using mock email service');
-          return new MockService(logger);
+        switch (configuration().emailPlatform) {
+          case 'mock':
+            logger.info('using mock email service');
+            return new MockService(logger);
+          case 'sparkpost':
+            logger.info('using sparkpost email service');
+            return new SparkpostService();
         }
 
         logger.info('using sparkpost email service');
-        return new SparkpostService();
+        return new MailGunService();
       },
       inject: [LOGGER],
     },
     EmailTemplateEngine,
-    SlackService,
+    GoogleService,
   ],
-  exports: [EMAIL_SERVICE, EmailTemplateEngine, SlackService],
+  exports: [EMAIL_SERVICE, EmailTemplateEngine, GoogleService],
 })
 export class NotificationModule {}

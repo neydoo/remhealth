@@ -2,12 +2,12 @@ import { Inject } from '@nestjs/common';
 import { LOGGER } from '@rem/shared/constants/schema';
 import { Logger } from 'winston';
 
-import SmsService from '../sms.interface';
+import CalendarService from '../calendar.interface';
 
-export class MockService implements SmsService {
+export class MockService implements CalendarService {
   constructor(@Inject(LOGGER) private logger: Logger) {}
 
-  async sendSms(message: string, number: string): Promise<void> {
+  async setupCalendar(message: string, number: string): Promise<void> {
     this.logger.info(`sending mock sms with message ${message} to ${number}`);
   }
 }

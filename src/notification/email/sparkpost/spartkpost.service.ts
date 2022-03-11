@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 
 import { EmailService } from '../email.interface';
 import { Mail, Address } from '../types';
-import configuration from 'src/config/configuration';
+import configuration from '@rem/config/configuration';
 
 export class SparkpostService implements EmailService {
   private client: Sparkpost;
@@ -11,7 +11,7 @@ export class SparkpostService implements EmailService {
   private defaultSender: Address;
 
   constructor() {
-    this.client = new Sparkpost(configuration().sparkpost.apiKey);
+    this.client = new Sparkpost(configuration().email.sparkpost.key);
 
     this.defaultSender = new Address(
       configuration().email.defaultSenderAddress,

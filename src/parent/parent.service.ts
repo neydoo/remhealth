@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { WARD } from 'src/shared/constants/schema';
+import { PARENT } from '@rem/shared/constants/schema';
 import { Ward, WardDocument } from './schema/ward.schema';
 
 @Injectable()
-export class WardService {
+export class ParentService {
   constructor(
-    @InjectModel(WARD)
+    @InjectModel(PARENT)
     private wardModel: Model<WardDocument>,
   ) {}
 
