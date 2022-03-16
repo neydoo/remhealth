@@ -9,7 +9,6 @@ export class VaccineService {
   constructor(
     @InjectModel(VACCINE)
     private vaccineModel: Model<VaccineDocument>,
-    private vaccineService: VaccineService,
   ) {}
 
   async getAllVaccines(): Promise<VaccineDocument[]> {

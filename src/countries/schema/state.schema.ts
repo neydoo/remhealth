@@ -1,6 +1,7 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { COUNTRY } from '@rem/shared/constants/schema';
+import { Document, SchemaTypes } from 'mongoose';
 import { IsNotEmpty } from 'class-validator';
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
 
@@ -21,21 +22,27 @@ export class State {
   @Prop({
     type: String,
     default: null,
-    required: true,
+    required: false,
   })
-  code: string;
+  code?: string;
 
   @Prop({
     default: true,
     required: false,
   })
-  isActive: boolean;
+  isActive?: boolean;
 
   @Prop({
     type: String,
     ref: 'User',
   })
-  lastEditedBy: string;
+  lastEditedBy?: string;
+
+  @Prop({
+    type: SchemaTypes.ObjectId,
+    ref: COUNTRY,
+  })
+  country: string;
 }
 
 const StateSchema = SchemaFactory.createForClass(State);

@@ -20,7 +20,7 @@ export class SparkpostService implements EmailService {
   }
 
   async sendMail(mail: Mail): Promise<void> {
-    const sender = mail.from || this.defaultSender;
+    const sender = mail.from || this.defaultSender; 
 
     const transmission: Sparkpost.CreateTransmission = {
       content: {
@@ -34,12 +34,12 @@ export class SparkpostService implements EmailService {
       },
     };
 
-    transmission.recipients = mail.to.map((recipient) => ({
-      address: {
-        name: recipient.name,
-        email: recipient.email,
-      },
-    }));
+    // transmission.recipients = mail.to.map((recipient) => ({
+    //   address: {
+    //     name: recipient.name,
+    //     email: recipient.email,
+    //   },
+    // }));
 
     if (!isEmpty(mail.cc)) {
       transmission.cc = mail.cc.map((cc) => ({

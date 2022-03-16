@@ -15,12 +15,15 @@ import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ResponseService } from '../../shared/services/response.service';
 import { Country } from '../schema/country.schema';
 import CountriesService from '../services/countries.service';
+import { StatesService } from 'countries/services/state.service';
+import { StatusCode } from '@rem/shared/types';
 
 @ApiTags('countries')
 @Controller('countries')
 export default class CountriesController {
   constructor(
     private readonly countryService: CountriesService,
+    private readonly stateService: StatesService,
     private responseService: ResponseService,
   ) {}
 
@@ -44,12 +47,17 @@ export default class CountriesController {
    * @param query
    */
   @Get('/all')
-  @ApiResponse({ status: 201, description: 'countries retrieved' })
+  @ApiResponse({ status: 200, description: 'countries retrieved' })
   @ApiResponse({ status: 401, description: 'unauthorized.' })
-  async all(@Res() res: Response): Promise<any> {
+  async all(@Res() res: Response): Promise<Response> {
     try {
       const countries = await this.countryService.all();
-      return this.responseService.json(res, 200, '', countries);
+      return this.responseService.json(
+        res,
+        StatusCode.Success,
+        'your request was successful',
+        countries,
+      );
     } catch (error) {
       return this.responseService.json(res, error);
     }
@@ -62,5 +70,13 @@ export default class CountriesController {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async create(@Body() data: any): Promise<Country> {
     return this.countryService.create(data);
+  }
+
+  @Get('/generate')
+  @ApiResponse({ status: 201, description: 'country saved' })
+  @ApiResponse({ status: 401, description: 'unauthorized.' })
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async lookup(): Promise<void> {
+    return this.countryService.lookUp();
   }
 }

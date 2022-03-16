@@ -5,7 +5,7 @@ export interface Configuration {
   google: {
     client_id: string;
     client_secret: string;
-    redirect_uris: string[];
+    redirect_uris: string;
   };
   sms?: {
     termii?: { url: string; key: string };
@@ -39,15 +39,18 @@ export default (): Configuration => ({
   emailPlatform: 'mock',
   port: parseInt(process.env.PORT, 10) || 2001,
   email: {
-    defaultSenderAddress: '',
-    defaultSenderName: '',
+    defaultSenderAddress: process.env.DEFAULT_SENDER_ADDRESS,
+    defaultSenderName: process.env.DEFAULT_SENDER_NAME,
     sparkpost: { key: '' },
-    mailgun: { key: '', domain: '' },
+    mailgun: {
+      key: process.env.MAILGUN_KEY,
+      domain: process.env.MAILGUN_DOMAIN,
+    },
   },
   google: {
-    client_id: '',
-    client_secret: '',
-    redirect_uris: [],
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uris: process.env.GOOGLE_REDIRECT_URLS,
   },
   logger: {
     logLevel: '',

@@ -6,8 +6,9 @@ import { ParentSchema } from './schema/parent.schema';
 
 @Module({
   providers: [ParentService],
+  exports: [ParentService],
   imports: [
     MongooseModule.forFeature([{ name: PARENT, schema: ParentSchema }]),
   ],
 })
-export class ParentdModule {}
+export class ParentModule {}

@@ -13,14 +13,14 @@ import { Response } from 'express';
 
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ResponseService } from '../../shared/services/response.service';
-import { State } from '../interfaces/state.interface';
-import StateService from '../services/state.service';
+import { StatesService } from '../services/state.service';
+import { StateDocument } from 'countries/schema/state.schema';
 
 @ApiTags('states')
 @Controller('states')
 export default class CountriesController {
   constructor(
-    private readonly stateService: StateService,
+    private readonly stateService: StatesService,
     private responseService: ResponseService,
   ) {}
 
@@ -60,7 +60,7 @@ export default class CountriesController {
   @ApiResponse({ status: 201, description: 'state saved' })
   @ApiResponse({ status: 401, description: 'unauthorized.' })
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async create(@Body() data: any): Promise<State> {
+  async create(@Body() data: any): Promise<StateDocument> {
     return this.stateService.create(data);
   }
 }

@@ -2,24 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PARENT } from '@rem/shared/constants/schema';
-import { Ward, WardDocument } from './schema/ward.schema';
+import { ParentDocument, Parent } from './schema/parent.schema';
 
 @Injectable()
 export class ParentService {
   constructor(
     @InjectModel(PARENT)
-    private wardModel: Model<WardDocument>,
+    private parentModel: Model<ParentDocument>,
   ) {}
 
-  async addWard(ward: Ward): Promise<void> {
-    await this.wardModel.create(ward);
+  async addParent(parent: Parent): Promise<ParentDocument> {
+    return this.parentModel.create(parent);
   }
 
-  async countWard(): Promise<number> {
-    return this.wardModel.count();
+  async countParent(): Promise<number> {
+    return this.parentModel.count();
   }
 
-  async findParentWards(parent: string): Promise<WardDocument[]> {
-    return this.wardModel.find({ parent });
+  async findParentParents(parent: string): Promise<ParentDocument[]> {
+    return this.parentModel.find({ parent });
   }
 }

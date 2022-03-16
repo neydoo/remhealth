@@ -1,11 +1,10 @@
 import Mailgun from 'mailgun.js';
 import formData from 'form-data';
-import { isEmpty } from 'lodash';
+import Client from 'mailgun.js/client';
 
 import { EmailService } from '../email.interface';
 import { Mail, Address } from '../types';
 import configuration from '@rem/config/configuration';
-import Client from 'mailgun.js/client';
 
 const DOMAIN = configuration().email.mailgun.domain;
 
@@ -34,9 +33,10 @@ export class MailGunService implements EmailService {
 
     const messageData = {
       from: sender,
-      to: to.join(','),
+      to,
       subject,
       text: body,
+      html: body,
       attachments,
     };
 

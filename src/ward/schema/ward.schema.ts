@@ -1,8 +1,9 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
+import { ParentDocument } from 'parent/schema/parent.schema';
 
 export type WardDocument = Ward & Document;
 
@@ -38,14 +39,15 @@ export class Ward {
   })
   @IsNotEmpty()
   @IsString()
-  dob: string;
+  dob: Date;
 
   @Prop({
     required: true,
+    type: SchemaTypes.ObjectId,
   })
   @IsNotEmpty()
   @IsString()
-  parent: string;
+  parent: string | ParentDocument;
 }
 
 const WardSchema = SchemaFactory.createForClass(Ward);

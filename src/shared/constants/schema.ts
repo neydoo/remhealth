@@ -6,6 +6,8 @@ export const WARD = 'ward';
 
 export const COUNTRY = 'country';
 
+export const STATE = 'state';
+
 export const PARENT = 'parent';
 
 export const VACCINE = 'vaccine';

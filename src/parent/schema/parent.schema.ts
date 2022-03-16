@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
 import { CountryDocument } from 'countries/schema/country.schema';
@@ -10,7 +10,7 @@ export type ParentDocument = Parent & Document;
 
 @BaseSchemaDecorator()
 export class Parent {
-  @ApiProperty({ description: 'first name of the child' })
+  @ApiProperty({ description: "parent's email" })
   @Prop({
     required: true,
   })
@@ -18,24 +18,31 @@ export class Parent {
   @IsString()
   email: string;
 
-  @ApiProperty({ description: 'last name of the child' })
+  @ApiProperty({ description: 'phonenumber of parent' })
   @Prop({
+    type: String,
     required: true,
   })
   @IsNotEmpty()
   @IsString()
   phone: string;
 
-  @ApiProperty({ description: 'other names of the child' })
+  @ApiProperty({ description: 'country id' })
   @Prop({
+    type: String,
     required: true,
   })
   @IsNotEmpty()
   @IsString()
+  @Prop({
+    type: SchemaTypes.ObjectId,
+    required: true,
+  })
   country: string | CountryDocument;
 
-  @ApiProperty({ description: 'dob of the child' })
+  @ApiProperty({ description: 'state id' })
   @Prop({
+    type: SchemaTypes.ObjectId,
     required: true,
   })
   @IsNotEmpty()

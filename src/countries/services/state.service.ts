@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { Model, PaginateModel, Document, FilterQuery } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { State } from '../interfaces/state.interface';
-import { COUNTRY } from '@rem/shared/constants/schema';
+import { STATE } from '@rem/shared/constants/schema';
+import { State, StateDocument } from 'countries/schema/state.schema';
 
 type stateModel<T extends Document> = PaginateModel<T>;
 
 @Injectable()
-export default class StatesService {
+export class StatesService {
   constructor(
-    @InjectModel(COUNTRY)
-    private readonly state: Model<State>,
-    @InjectModel(COUNTRY)
-    private readonly statePaginated: stateModel<State>,
+    @InjectModel(STATE)
+    private readonly state: Model<StateDocument>,
+    @InjectModel(STATE)
+    private readonly statePaginated: stateModel<StateDocument>,
   ) {}
 
   /**
@@ -39,7 +39,7 @@ export default class StatesService {
    * Get all states
    * @param query
    */
-  async all(): Promise<State[]> {
+  async all(): Promise<StateDocument[]> {
     return this.state.find().sort({ name: 1 });
   }
 
@@ -47,7 +47,7 @@ export default class StatesService {
    * Create state
    * @param createTransactionDto
    */
-  async create(createStateDto: State): Promise<State> {
+  async create(createStateDto: State): Promise<StateDocument> {
     const check = await this.state.findOne({ name: createStateDto.name });
     if (check) {
       return this.state.findOneAndUpdate(
@@ -57,12 +57,12 @@ export default class StatesService {
       );
     }
     // eslint-disable-next-line new-cap
-    const state = new this.state(createStateDto);
+    const state = await this.state.create(createStateDto);
 
-    return state.save();
+    return state;
   }
 
-  async getOne(query: FilterQuery<State> = {}): Promise<State> {
-    return this.state.findOne(query);
-  }
+  // async getOne(query: FilterQuery<State> = {}): Promise<StateDocument> {
+  //   return this.state.findOne(query);
+  // }
 }

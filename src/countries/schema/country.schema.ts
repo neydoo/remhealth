@@ -1,8 +1,10 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
+import { STATE } from '@rem/shared/constants/schema';
+import { StateDocument } from './state.schema';
 
 export enum CountryCurrencyType {
   Naira = 'Naira',
@@ -48,6 +50,9 @@ export class Country {
   priority: number;
 
   @Prop()
+  timeZone: string;
+
+  @Prop()
   symbol: string;
 
   @Prop({
@@ -61,8 +66,16 @@ export class Country {
     ref: 'User',
   })
   lastEditedBy: string;
+
+  // virtual fields
+  states?: StateDocument[];
 }
 
 const CountrySchema = SchemaFactory.createForClass(Country);
-
+CountrySchema.virtual('states', {
+  ref: STATE,
+  autopopulate: true,
+  localField: '_id',
+  foreignField: 'country',
+});
 export { CountrySchema };

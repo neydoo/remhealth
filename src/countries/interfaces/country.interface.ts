@@ -11,4 +11,5 @@ export interface Country extends Document {
   symbol: string;
   isActive: boolean;
   lastEditedBy: string;
+  timeZone: string;
 }

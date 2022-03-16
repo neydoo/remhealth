@@ -13,17 +13,17 @@ export class Address {
 export class Mail {
   from?: Address;
 
-  to: Array<Address>;
+  to: Address | Array<Address>;
 
-  cc: Array<Address>;
+  cc?: Array<Address>;
 
   subject: string;
 
   body: string;
 
-  attachments: Array<Attachment>;
+  attachments?: Array<Attachment>;
 
-  async attachFile(): Promise<void> {
-    return null;
-  }
+  // async attachFile(): Promise<void> {
+  // return null;
+  // }
 }

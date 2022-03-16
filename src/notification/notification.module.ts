@@ -9,6 +9,7 @@ import { EMAIL_SERVICE, LOGGER } from '@rem/shared/constants/schema';
 import configuration from '@rem/config/configuration';
 import { MailGunService } from './email/mailgun/mail.service';
 import GoogleService from './calendar/google/calendar.service';
+import { NotificationService } from './notification.service';
 
 @Module({
   imports: [],
@@ -32,7 +33,13 @@ import GoogleService from './calendar/google/calendar.service';
     },
     EmailTemplateEngine,
     GoogleService,
+    NotificationService,
   ],
-  exports: [EMAIL_SERVICE, EmailTemplateEngine, GoogleService],
+  exports: [
+    EMAIL_SERVICE,
+    EmailTemplateEngine,
+    GoogleService,
+    NotificationService,
+  ],
 })
 export class NotificationModule {}

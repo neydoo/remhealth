@@ -46,5 +46,5 @@ export default class CreateCountryDto {
 
   @IsString()
   @IsOptional()
-  lastEditedBy: string;
+  lastEditedBy?: string;
 }

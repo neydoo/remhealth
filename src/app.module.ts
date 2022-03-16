@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -10,12 +10,16 @@ import { UserModule } from './user/user.module';
 import { WardModule } from './ward/ward.module';
 import { VaccineModule } from './vaccine/vaccine.module';
 import * as mongoosePopulate from 'mongoose-autopopulate';
+import { NotificationModule } from './notification/notification.module';
+import { ParentModule } from 'parent/parent.module';
+import CountriesModule from 'countries/countries.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
     }),
+    CacheModule.register(),
     MongooseModule.forRoot(configuration().database.url, {
       connectionFactory: (connection) => {
         // applies plugin to all schema
@@ -27,7 +31,10 @@ import * as mongoosePopulate from 'mongoose-autopopulate';
     }),
     ScheduleModule.forRoot(),
     { module: LoggerModule, global: true },
-    UserModule,
+    NotificationModule,
+    CountriesModule,
+    // UserModule,
+    ParentModule,
     WardModule,
     VaccineModule,
   ],
