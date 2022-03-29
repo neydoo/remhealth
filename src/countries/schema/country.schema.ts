@@ -1,7 +1,9 @@
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
+
 import { BaseSchemaDecorator } from '../../shared/decorators/base_schema.decorator';
 import { STATE } from '@rem/shared/constants/schema';
 import { StateDocument } from './state.schema';
@@ -78,4 +80,5 @@ CountrySchema.virtual('states', {
   localField: '_id',
   foreignField: 'country',
 });
+CountrySchema.plugin(mongoosePaginate);
 export { CountrySchema };

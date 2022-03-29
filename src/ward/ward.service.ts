@@ -89,7 +89,9 @@ export class WardService {
 
     const groupedVaccines = await this.utilService.group(vaccines, 'due');
     const vacs = Object.values(groupedVaccines);
-    const maxDay = Math.max(Number(Object.keys(groupedVaccines)));
+    const maxDay = Math.max(
+      ...Object.keys(groupedVaccines).map((i) => Number(i)),
+    );
 
     const maxDate = dayjs()
       .subtract(maxDay - daysBeforeDueDate)
